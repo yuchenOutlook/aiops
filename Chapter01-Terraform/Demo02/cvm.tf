@@ -2,7 +2,15 @@ terraform {
   required_providers {
     tencentcloud = {
       source = "tencentcloudstack/tencentcloud"
-    }
+    } 
+  }
+  cloud { 
+    
+    organization = "ai-ops-vincent-demo-org" 
+
+    workspaces { 
+      name = "terraform-demo-test" 
+    } 
   }
 }
 
@@ -38,7 +46,6 @@ resource "tencentcloud_instance" "web" {
   allocate_public_ip         = true
   internet_max_bandwidth_out = 20
   security_groups            = [tencentcloud_security_group.default.id]
-  count                      = 1
 }
 
 # Create security group
