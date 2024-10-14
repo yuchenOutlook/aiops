@@ -6,21 +6,19 @@ terraform {
   }
 }
 
-terraform {
-  backend "cos" {
-    region = "ap-guangzhou"
-    # check the bucket name in your cos console in tencent cloud and replace it
-    bucket = "aiops-private-terraform-state-1330143743"
-    prefix = "terraform-state"
-    encrypt = true
-  }
-}
+# terraform {
+#   backend "cos" {
+#     region = "ap-hongkong"
+#     # check the bucket name in your cos console in tencent cloud and replace it
+#     bucket = "aiops-private-terraform-state-1330143743"
+#     prefix = "terraform-state"
+#     encrypt = true
+#   }
+# }
 
 # Configure the TencentCloud Provider
 provider "tencentcloud" {
-  # secret_id  = ""
-  # secret_key = ""
-  region     = "ap-guangzhou"
+  region     = "ap-hongkong"
 }
 
 # Get availability zones
@@ -77,14 +75,14 @@ resource "tencentcloud_security_group_rule" "ssh" {
   policy            = "accept"
 }
 
-# data "tencentcloud_user_info" "info" {}
+data "tencentcloud_user_info" "info" {}
 
-# locals {
-#   app_id = data.tencentcloud_user_info.info.app_id
-# }
+locals {
+  app_id = data.tencentcloud_user_info.info.app_id
+}
 
-# resource "tencentcloud_cos_bucket" "private_bucket" {
-#   bucket = "aiops-private-terraform-state-${local.app_id}"
-#   acl    = "private"
-#   encryption_algorithm = "AES256"
-# }
+resource "tencentcloud_cos_bucket" "private_bucket" {
+  bucket = "aiops-terraform-state-${local.app_id}"
+  acl    = "private"
+  encryption_algorithm = "AES256"
+}
